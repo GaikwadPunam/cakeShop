@@ -1,0 +1,23 @@
+name: Deploy Cake Project to InfinityFree
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  ftp-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Deploy via FTP
+        uses: SamKirkland/FTP-Deploy-Action@4.2.0
+        with:
+          server: ftpupload.net
+          username: ${{ secrets.if0_39051013 }}
+          password: ${{ secrets.q3X54ZYUre3vK3 }}
+          local-dir: ./
+          server-dir: /htdocs/
