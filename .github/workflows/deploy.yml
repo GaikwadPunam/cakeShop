@@ -20,4 +20,4 @@ jobs:
           username: ${{ secrets.if0_39051013 }}
           password: ${{ secrets.q3X54ZYUre3vK3 }}
           local-dir: ./
-          server-dir:  ${{ secrets./htdocs/}}
+          server-dir:  ${{ secrets.FTP_TARGET_DIR}}
