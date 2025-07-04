@@ -10,11 +10,18 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Fonts -->
-    <link rel="dns-prefetch" href="//fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
+    @vite([ 'resources/js/app.js'])
 
-    <!-- Scripts -->
-    @vite(['resources/sass/app.scss', 'resources/js/app.js'])
+    <!-- तुमचं Bootstrap आणि Custom Styles - नंतर load करा -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('css/bootstrap.css') }}">
+    <link href="{{ asset('css/font-awesome.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/style.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/responsive.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.5.9/slick.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.5.9/slick-theme.min.css">
+    <link rel="stylesheet" href="{{ asset('css/slick-theme.css') }}">
+    <link href="https://fonts.googleapis.com/css?family=Poppins:400,600,700&display=swap" rel="stylesheet">
     <style>
         .sidenav {
   height: 100%;
@@ -103,7 +110,7 @@
         </nav>
         <div class="sidenav">
         <a href=>Cake shop</a>
-  <a href="{{ url('cake/index')}}">View</a>
+  <a href="{{ url('cake/index/cake')}}">View</a>
   <a href="{{ url('cake/create')}}">Create</a>
   <a href="{{ url('cake/order')}}">Order</a>
 
@@ -126,6 +133,58 @@
 
 
 
+<!-- resources/views/dashboard.blade.php -->
+
+<div class="container">
+    
+
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card   mb-3 border-0 shadow-lg">
+                <div class="card-body text-center">
+                                  <h4>Total Cakes</h4>
+
+                    <h5 class="card-title">{{ $totalCakes }}</h5>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card  mb-3 border-0 shadow-lg">
+                <div class="card-body text-center ">
+                  <h4>Total Orders</h4>
+                    <h5 class="card-title">{{ $totalOrders }}</h5>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card  mb-3 border-0 shadow-lg">
+                <div class="card-body text-center">
+                  <h4>Total Customers</h4>
+                    <h5 class="card-title">{{ $totalCustomers }}</h5>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<form method="GET" action="{{ route('cake.index') }}" class="d-flex mb-3" id="searchForm">
+    <input type="text" name="search" id="searchInput" class="form-control me-2" placeholder="Search cake..." value="{{ request('search') }}">
+
+    
+         <button type="submit" class="btn btn-primary">Search</button>
+
+    <button type="button" class="btn btn-danger me-2" onclick="clearSearch()">Clear</button>
+
+</form>
+
+<script>
+    function clearSearch() {
+        document.getElementById('searchInput').value = ''; 
+        document.getElementById('searchForm').submit();    
+    }
+</script>
 
 
 
@@ -217,6 +276,9 @@
     
   </table>
 
+<div class="d-flex justify-content-center">
+    {{ $allCakes->links() }}
+</div>
 
 </div>
 </div>

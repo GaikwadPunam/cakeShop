@@ -17,6 +17,7 @@ return [
     |            "memcached", "redis", "dynamodb", "array"
     |
     */
+//'driver' => 'file',
 
     'driver' => env('SESSION_DRIVER', 'file'),
 
@@ -30,6 +31,10 @@ return [
     | to immediately expire on the browser closing, set that option.
     |
     */
+    //'lifetime' => 120,  
+
+    //'expire_on_close' => true,
+
 
     'lifetime' => env('SESSION_LIFETIME', 120),
 

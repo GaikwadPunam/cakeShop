@@ -1,15 +1,18 @@
 <?php
 
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\WelcomeController;
 use App\Http\Controllers\CakeController;
 use App\Http\Controllers\TestimonialController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\ChocolateController;
 use App\Http\Controllers\AboutController;
-use App\Http\Controllers\WelcomeController;
 use App\Http\Controllers\CartController;
 use Illuminate\Support\Facades\Auth;
 
+use Illuminate\Support\Facades\Session;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,12 +25,21 @@ use Illuminate\Support\Facades\Auth;
 |
 */
 
+//Route::get('/', action: function () {
+  //  return view('welcome');
+//});
+Route::get('/', [WelcomeController::class, 'index'])->name('welcome');
 
- Auth::routes();
 
-Route::get('/', [App\Http\Controllers\WelcomeController::class, 'index'])->name('welcome');
+Route::get('/dashboard', [HomeController::class, 'index'])
+    ->middleware(['auth', 'verified'])
+    ->name('dashboard');
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
 Route::get('/about', [App\Http\Controllers\AboutController::class, 'index'])->name('about');
 Route::get('/chocolate', [App\Http\Controllers\ChocolateController::class, 'index'])->name('chocolate');
 Route::get('/contact', [App\Http\Controllers\ContactController::class, 'index'])->name('contact');
@@ -42,6 +54,8 @@ Route::get('/my_order', [CartController::class, 'my_order'])->name('my_order');
 Route::get('/delivered/{id}', [CartController::class, 'delivered'])->name('delivered');
 Route::get('/cancel_order/{id}', [CartController::class, 'cancel_order'])->name('cancel_order');
 
+Route::get('/cake/export', [CakeController::class, 'export'])->name('cake.export');
+Route::get('/cakes/pdf', [CakeController::class, 'exportPdf'])->name('cakes.pdf');
 
 Route::group(['middleware'=>'cakeAdmin'], function(){
 
@@ -58,3 +72,11 @@ Route::delete('/cake/{cake}', [App\Http\Controllers\CakeController::class, 'dest
 Route::get('/cake/order', [App\Http\Controllers\CakeController::class, 'order'])->name('cake.order');                                         
 
 });   
+require __DIR__.'/auth.php';
+
+Route::post('/logout-on-tab-close', function () {
+    Auth::logout();
+    Session::invalidate();
+    Session::regenerateToken();
+    return response()->noContent(); // 204 No Content
+});

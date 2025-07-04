@@ -7,6 +7,10 @@ use App\Http\Requests\cakeCreateRequest;
 use Illuminate\Http\Request;
 use App\Models\cake;
 use App\Models\Order;
+use App\Models\User;
+use App\Exports\CakesExport;
+use Maatwebsite\Excel\Facades\Excel;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 use Illuminate\Support\Facades\Storage;
 
@@ -20,12 +24,24 @@ class CakeController extends Controller
         $this->middleware('auth')->except(['index']);
     }
 
-    public function index(){
-        $allCakes = cake::get();
-        return view('cake.index',compact( 'allCakes'));
+  public function index(Request $request)
+{
+    $query = cake::query();
 
+    if ($request->has('search') && $request->search != '') {
+        $search = $request->search;
+        $query->where('name', 'like', "%$search%");
     }
-    
+
+    $allCakes = $query->paginate(2); // You can change number of records per page
+
+    $totalCakes = cake::count();
+    $totalOrders = Order::count();
+    $totalCustomers = User::count();
+
+    return view('cake.index', compact('totalCakes', 'totalOrders', 'totalCustomers', 'allCakes'));
+}
+ 
 
     public function store(cakeCreateRequest $request){
            
@@ -96,4 +112,15 @@ class CakeController extends Controller
         return view('cake.order', compact('order'));
 
     }
+    public function export()
+{
+    return Excel::download(new CakesExport, 'cakes_list.xlsx');
+}
+
+public function exportPdf()
+{
+    $cakes = Cake::all();
+    $pdf = Pdf::loadView('pdf.cakes', compact('cakes'));
+    return $pdf->download('cakes_list.pdf');
+}   
 }

@@ -12,11 +12,18 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Fonts -->
-    <link rel="dns-prefetch" href="//fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
+    @vite([ 'resources/js/app.js'])
 
-    <!-- Scripts -->
-    @vite(['resources/sass/app.scss', 'resources/js/app.js'])
+    <!-- तुमचं Bootstrap आणि Custom Styles - नंतर load करा -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('css/bootstrap.css') }}">
+    <link href="{{ asset('css/font-awesome.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/style.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/responsive.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.5.9/slick.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.5.9/slick-theme.min.css">
+    <link rel="stylesheet" href="{{ asset('css/slick-theme.css') }}">
+    <link href="https://fonts.googleapis.com/css?family=Poppins:400,600,700&display=swap" rel="stylesheet">
     <style>
         .sidenav {
   height: 100%;
@@ -105,7 +112,7 @@
         </nav>
         <div class="sidenav">
   <a href=>Cake shop</a>
-  <a href="{{ url('cake/index')}}">View</a>
+  <a href="{{ url('cake/index/cake')}}">View</a>
   <a href="{{ url('cake/create')}}">Create</a>
   <a href="{{ url('cake/order')}}">Order</a>
 
