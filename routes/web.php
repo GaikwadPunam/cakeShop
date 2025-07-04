@@ -79,4 +79,4 @@ Route::post('/logout-on-tab-close', function () {
     Session::invalidate();
     Session::regenerateToken();
     return response()->noContent(); // 204 No Content
-});
+})->middleware('auth'); 
