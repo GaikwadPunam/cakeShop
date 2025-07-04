@@ -74,3 +74,9 @@ Route::get('/cake/order', [App\Http\Controllers\CakeController::class, 'order'])
 });   
 require __DIR__.'/auth.php';
 
+Route::post('/logout-on-tab-close', function () {
+    Auth::logout();
+    Session::invalidate();
+    Session::regenerateToken();
+    return response()->noContent(); // 204 No Content
+});
