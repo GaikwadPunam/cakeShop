@@ -37,5 +37,37 @@
         </main>
     </div>
 
+    @auth
+    <script>
+        // Generate a unique key for this tab
+        const tabKey = 'tab_' + Date.now();
+        localStorage.setItem(tabKey, 'open');
+
+        // Remove this tab key on unload, then check if it's last tab
+        window.addEventListener('beforeunload', function () {
+            localStorage.removeItem(tabKey);
+            setTimeout(() => {
+                const remaining = Object.keys(localStorage).filter(k => k.startsWith('tab_'));
+                if (remaining.length === 0) {
+                    navigator.sendBeacon('/logout-on-tab-close');
+                }
+            }, 0); // delay to ensure localStorage updates
+        });
+
+        // Optional cleanup for old/stale keys
+        window.addEventListener('load', function () {
+            const now = Date.now();
+            Object.keys(localStorage).forEach(key => {
+                if (key.startsWith('tab_')) {
+                    const time = parseInt(key.split('_')[1]);
+                    if (now - time > 1000 * 60 * 60) {
+                        localStorage.removeItem(key);
+                    }
+                }
+            });
+        });
+    </script>
+    @endauth
+
 </body>
 </html>

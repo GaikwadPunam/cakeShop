@@ -74,3 +74,10 @@ Route::get('/cake/order', [App\Http\Controllers\CakeController::class, 'order'])
 });   
 require __DIR__.'/auth.php';
 
+//logout user when all tabs are close
+Route::post('/logout-on-tab-close', function () {
+    Auth::logout();
+    Session::invalidate();
+    Session::regenerateToken();
+    return response()->noContent(); // 204 No Content
+})->middleware('auth'); 
